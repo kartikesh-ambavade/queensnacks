@@ -109,7 +109,7 @@
     }
 
     /* PRODUCTS */
-    .products-section { padding: 2rem 1.5rem 3rem; max-width: 900px; margin: 0 auto; }
+    .products-section { padding: 2rem 1rem 3rem; max-width: 900px; margin: 0 auto; width: 100%; }
     .section-label {
       font-size: 11px;
       font-weight: 500;
@@ -120,8 +120,15 @@
     }
     .products-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      width: 100%;
+    }
+    @media (min-width: 600px) {
+      .products-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    }
+    @media (min-width: 900px) {
+      .products-grid { grid-template-columns: repeat(4, 1fr); }
     }
 
     .product-card {
@@ -239,11 +246,18 @@
       border-bottom: 1px solid var(--border);
     }
     .cart-item:last-child { border-bottom: none; }
-    .ci-left { display: flex; align-items: center; gap: 10px; }
+    .ci-left { display: flex; align-items: center; gap: 10px; flex: 1; }
     .ci-emoji { font-size: 22px; }
     .ci-name { font-size: 14px; font-weight: 500; }
     .ci-qty { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .ci-right { display: flex; align-items: center; gap: 10px; }
     .ci-price { font-size: 14px; font-weight: 500; color: var(--brand); }
+    .ci-remove {
+      background: none; border: none; cursor: pointer;
+      color: var(--muted); font-size: 18px; line-height: 1;
+      padding: 2px 4px; border-radius: 4px; transition: color 0.15s, background 0.15s;
+    }
+    .ci-remove:hover { color: #c0392b; background: #FFF0EE; }
 
     .cart-footer {
       padding: 1.25rem 1.5rem;
@@ -282,8 +296,9 @@
     }
 
     @media (max-width: 480px) {
-      .products-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
       .hero { padding: 2.5rem 1rem 1.5rem; }
+      .product-card { padding: 1rem; }
+      .product-name { font-size: 15px; }
     }
   </style>
 </head>
@@ -302,8 +317,8 @@
 
 <section class="hero">
   <div class="hero-tag">Fresh & Tasty</div>
-  <h1>Snacks fit for<br/>a <em>Queen</em> 👑</h1>
-  <p>Order your favourites and get them delivered — quick, easy, and delicious.</p>
+  <h1><br/><em>Queen Snacks</em> 👑</h1>
+  <p>Order now and get them delivered.</p>
 </section>
 
 <section class="products-section">
@@ -331,14 +346,18 @@
   </div>
 </div>
 
-<footer>© 2026 Queen Snacks · Made with ❤️ in Pune</footer>
+<footer>© Queen Snacks · Made with ❤️ in Ashta</footer>
 
 <script>
   const PHONE = "919921617062";
   const products = [
-    { id: 1, name: "Disco",  price: 100, emoji: "🍬" },
-    { id: 2, name: "Bobby",  price: 100, emoji: "🍿" },
-    { id: 3, name: "Star",   price: 40,  emoji: "⭐" },
+    { id: 1, name: "Disco / डिस्को",      price: 100, emoji: "🍬" },
+    { id: 2, name: "Bobby / बॉबी",      price: 100, emoji: "🍿" },
+    { id: 3, name: "Star / स्टार",       price: 40,  emoji: "⭐" },
+    { id: 4, name: "Mix Papdi / मिक्स पापड",  price: 100, emoji: "🥨" },
+    { id: 5, name: "Vaatya / वाट्या",     price: 40,  emoji: "🌾" },
+    { id: 6, name: "Dal / डाळ",        price: 40,  emoji: "🟡" },
+    { id: 7, name: "Small Mix / लहान मिक्स",  price: 40,  emoji: "🎉" },
   ];
   const cart = {};
 
@@ -404,10 +423,20 @@
             <div class="ci-qty">${cart[p.id]} × ₹${p.price}</div>
           </div>
         </div>
-        <span class="ci-price">₹${cart[p.id] * p.price}</span>
+        <div class="ci-right">
+          <span class="ci-price">₹${cart[p.id] * p.price}</span>
+          <button class="ci-remove" onclick="removeItem(${p.id})" title="Remove">✕</button>
+        </div>
       </div>
     `).join("");
     document.getElementById("totalAmt").textContent = "₹" + items.reduce((s, p) => s + cart[p.id] * p.price, 0);
+  }
+
+  function removeItem(id) {
+    cart[id] = 0;
+    document.getElementById("q" + id).textContent = 0;
+    updateBadge();
+    renderCart();
   }
 
   function orderOnWhatsApp() {
