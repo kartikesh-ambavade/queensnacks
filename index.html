@@ -142,11 +142,18 @@
     .product-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.08); transform: translateY(-2px); }
 
     .product-emoji-wrap {
-      width: 56px; height: 56px;
+      width: 96px; height: 96px;
       background: #FFF0E6;
-      border-radius: 14px;
+      border-radius: 24px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 28px;
+      font-size: 30px;
+      overflow: hidden;
+    }
+    .product-emoji-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
     .product-name { font-size: 17px; font-weight: 500; color: var(--text); }
     .product-price { font-size: 14px; color: var(--muted); }
@@ -247,7 +254,6 @@
     }
     .cart-item:last-child { border-bottom: none; }
     .ci-left { display: flex; align-items: center; gap: 10px; flex: 1; }
-    .ci-emoji { font-size: 22px; }
     .ci-name { font-size: 14px; font-weight: 500; }
     .ci-qty { font-size: 12px; color: var(--muted); margin-top: 2px; }
     .ci-right { display: flex; align-items: center; gap: 10px; }
@@ -351,22 +357,24 @@
 <script>
   const PHONE = "919921617062";
   const products = [
-    { id: 1, name: "Disco / डिस्को",                       price: 100, emoji: "🍬" },
-    { id: 2, name: "Bobby / बॉबी",                        price: 100, emoji: "🍿" },
-    { id: 3, name: "Star / स्टार",                         price: 50,  emoji: "⭐" },
-    { id: 4, name: "Mix Papdi / मिक्स पापडी",              price: 100, emoji: "🥨" },
-    { id: 5, name: "Vaatya / वाट्या",                      price: 50,  emoji: "🌾" },
-    { id: 6, name: "Dal / डाळ",                          price: 50,  emoji: "🟡" },
-    { id: 7, name: "Small Mix / लहान मिक्स",               price: 50,  emoji: "🎉" },
-    { id: 8, name: "Nachani / नाचणी",                     price: 100, emoji: "🌿" },
-    { id: 9, name: "Small Nachani / लहान नाचणी",          price: 50,  emoji: "🍃" },
+    { id: 1, name: "Disco / डिस्को",                       price: 100 },
+    { id: 2, name: "Bobby / बॉबी",                        price: 100, image: "bobby.jpeg" },
+    { id: 3, name: "Star / स्टार",                         price: 50,  image: "star.jpeg" },
+    { id: 4, name: "Mix Papdi / मिक्स पापडी",              price: 100 },
+    { id: 5, name: "Vaatya / वाट्या",                      price: 50,  image: "vaatya.jpeg" },
+    { id: 6, name: "Dal / डाळ",                          price: 50 },
+    { id: 7, name: "Small Mix / लहान मिक्स",               price: 50,  image: "small mix.jpeg" },
+    { id: 8, name: "Nachani / नाचणी",                     price: 100 },
+    { id: 9, name: "Small Nachani / लहान नाचणी",          price: 50 },
   ];
   const cart = {};
 
   function renderProducts() {
     document.getElementById("products").innerHTML = products.map(p => `
       <div class="product-card">
-        <div class="product-emoji-wrap">${p.emoji}</div>
+        <div class="product-emoji-wrap">
+          ${p.image ? `<img src="images/${p.image}" alt="${p.name}">` : ''}
+        </div>
         <div class="product-name">${p.name}</div>
         <div class="product-price"><strong>₹${p.price}</strong></div>
         <div class="qty-controls">
@@ -419,7 +427,6 @@
     el.innerHTML = items.map(p => `
       <div class="cart-item">
         <div class="ci-left">
-          <span class="ci-emoji">${p.emoji}</span>
           <div>
             <div class="ci-name">${p.name}</div>
             <div class="ci-qty">${cart[p.id]} × ₹${p.price}</div>
